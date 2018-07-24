@@ -4,7 +4,7 @@ result = 800
 
 class Individual:
     
-    NMAX = 10
+    NMAX = 10       #lunghezza dell' individuo
     
     def __init__(self):
         self.fitness = 0
@@ -12,19 +12,19 @@ class Individual:
         for i in range(self.NMAX):
             self.numbers.append(randint(0,100))
     
-    def calfitness(self):
+    def calfitness(self):       #modifica il fitness
         res = 0
         for i in self.numbers:
             res = res + i
-        self.fitness = abs(result - res)  #fitness al contrario
+        self.fitness = abs(result - res)  #minore fitness equivale migliore individuo
         
-    def crossover(self,individual):
+    def crossover(self,individual):             #restitusce un individuo "figlio" di una coppia
         cut = randint(1,self.NMAX - 1)
         son = Individual()
         son.numbers = self.numbers[:cut] + individual.numbers[cut:]
         return son
     
-    def mutation(self):
+    def mutation(self):                #modifica un numero randomicamente
         a = randint(0,self.NMAX - 1)
         self.numbers[a] = randint(0,100)
         
@@ -48,7 +48,7 @@ class Population:
         for i in range(pop_number):
            self.population.append(Individual())
            
-    def pop_fitness(self):
+    def pop_fitness(self):          #calcola i fitness della popolazione
         for ind in self.population:
             ind.calfitness()
 
@@ -63,11 +63,11 @@ class Population:
                     self.population[j] = self.population[i]
                     self.population[i] = x
                     
-    def BestFit(self):
+    def BestFit(self):          #restituisce il migliore fitness della popolazione
         self.order()
         return self.population[0].fitness
         
-    def NextGen(self):
+    def NextGen(self):          #modifica la genenerazione applicando crossovere e mutazione
         Next = []
         i = 0
         #Creo la nuova generazione
@@ -82,16 +82,16 @@ class Population:
             if (prb < 10):
                 ind.mutation()
         
-    def PrintBest(self):
+    def PrintBest(self):           #mostra il miglior individuo
         self.order()
         self.population[0].Print()
         
-    def Print_pop(self):
+    def Print_pop(self):           #mostra numeri e fitness dell'intera popolazione 
         for ind in self.population:
             ind.Print()
             print()
             
-    def fitness_medio(self):
+    def fitness_medio(self):        #resituisce fitness medio della popolazione
         media = 0
         for i in self.population:
             i.calfitness()
