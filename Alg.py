@@ -24,12 +24,12 @@ def Algorithm():
 Algorithm()   
     
 
-def Analisi(N_pop):
-    pops_fitness = []
-    Generazioni = []
-    for i in range(N_pop):
-        Generazioni.append(cl.Population())
-        pops_fitness.append(Generazioni[i].fitness_medio())
+#def Analisi(N_pop):
+#    pops_fitness = []
+#    Generazioni = []
+#    for i in range(N_pop):
+#        Generazioni.append(cl.Population())
+#        pops_fitness.append(Generazioni[i].fitness_medio())
     
 
 
