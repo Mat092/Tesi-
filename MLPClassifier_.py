@@ -8,7 +8,7 @@ class RNet_population:
     
     def __init__(self):
         self.medium_fitness = 0
-        self.num_individuals = 100
+        self.num_individuals = 10
         self.RNpopulation = []
         for n in range(self.num_individuals):
             self.RNpopulation.append(Random_Network())
@@ -68,17 +68,20 @@ class Random_Network:
             self.genome.append(randint(1,100))
             
     def RNfitness(self, X_train, X_test, y_train, y_test): 
+        #Metodi di MLPCassifier 
         tpl = tuple(self.genome)
-        net = MLPClassifier(hidden_layer_sizes = tpl,
-                                          alpha = 1, activation = 'relu')
+        net = MLPClassifier(hidden_layer_sizes = tpl, activation = 'logistic')
+        #MLPClassifier(hidden_layer_sizes = tpl,
+        #                                  alpha = 1, activation = 'relu')
+        
         net.fit(X_train, y_train)
-        self.fitness = net.score(X_test, y_test)
+        self.fitness = net.score(X_test, y_test)            
         
     def Crossover1(self, RandNet): #sommo i contributi tagliati in x e y 
         son1 = []                  #dalle due network
         son2 = []
-        x = randint(0,len(self.genome)-1)
-        y = randint(0,len(RandNet.genome)-1)
+        x = randint(0,len(self.genome))
+        y = randint(0,len(self,RandNet.genome))
         son1 = self.genome[:x] + RandNet.genome[y:]
         son2 = self.genome[x:] + RandNet.genome[:y]
         return son1,son2
