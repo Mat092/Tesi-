@@ -32,7 +32,7 @@ class RNet_population:
                     self.RNpopulation[ind2] = self.RNpopulation[ind1]
                     self.RNpopulation[ind1] = sort
     
-    def shortBubbleSort(self):
+    def shortBubbleSort(self): #ordina la popolazione per fitness
         exchanges = True
         passnum = len(self.RNpopulation)-1
         while passnum > 0 and exchanges:
@@ -92,13 +92,13 @@ class Random_Network:
         y = randint(0,100)
         if x < 30:
             if x < 15:
-                self.genome.append(randint(1,1000))
+                self.genome.append(randint(1,100))
             elif len(self.genome) != 1:
                 z = randint(0,self.num_hidden_layers - 1)
                 del self.genome[z]
         if y < 30:
             z = randint(0,len(self.genome) - 1)
-            self.genome[z] = randint(1,1000)
+            self.genome[z] = randint(1,100)
         
     def Print_RNet(self):
         print("Hidden_Layer:",self.genome,sep = "\t")

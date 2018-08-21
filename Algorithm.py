@@ -28,7 +28,7 @@ def algorithm():
         Target = digits.target
         Data_train, data_test, target_train, target_test = \
             train_test_split(Data,Target,test_size =.4,random_state = 42)
-    
+        
         if gen == 1: 
            #generation.Print_pop() 
            generation.pop_fitness(Data_train, data_test, target_train, target_test)
