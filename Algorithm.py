@@ -12,26 +12,26 @@ def algorithm():
     while generation.Best_Score() < 1: #continua fino a fitness = 1
         
         
-        dataset = make_moons(n_samples = 1000, noise=0.3, random_state=0)
+        dataset = make_moons(n_samples = 100, noise=0.3, random_state=0)
         digits = datasets.load_digits()
         #make_circles(noise=0.2, factor=0.5, random_state=1)
         
         #per make_moons
-#        X, y = dataset
-#        X = StandardScaler().fit_transform(X)
-#        X_train, X_test, y_train, y_test = \
-#            train_test_split(X, y, test_size=.4, random_state=42)
+        X, y = dataset
+        X = StandardScaler().fit_transform(X)
+        X_train, X_test, y_train, y_test = \
+            train_test_split(X, y, test_size=.4, random_state=42)
         
-        #per numeri scritti a mano:
-        n_samples = len(digits.images)
-        Data = digits.images.reshape((n_samples,-1))
-        Target = digits.target
-        Data_train, data_test, target_train, target_test = \
-            train_test_split(Data,Target,test_size =.4,random_state = 42)
+#        #per numeri scritti a mano:
+#        n_samples = len(digits.images)
+#        Data = digits.images.reshape((n_samples,-1))
+#        Target = digits.target
+#        Data_train, data_test, target_train, target_test = \
+#            train_test_split(Data,Target,test_size =.4,random_state = 42)
         
         if gen == 1: 
            #generation.Print_pop() 
-           generation.pop_fitness(Data_train, data_test, target_train, target_test)
+           generation.pop_fitness(X_train, X_test, y_train, y_test)
            generation.shortBubbleSort()
         
         #Creazione della nuova generazione
@@ -53,7 +53,7 @@ def algorithm():
         for i in range(generation.num_individuals):
             generation.RNpopulation[i].Mutation()
         
-        generation.pop_fitness(Data_train, data_test, target_train, target_test)
+        generation.pop_fitness(X_train, X_test, y_train, y_test)
         
         #Calcolo fitness e ordino gli individui 
         generation.medium_pop_fitness()

@@ -4,6 +4,7 @@
 from sklearn.neural_network import MLPClassifier
 from random import randint
 
+
 class RNet_population:
     
     def __init__(self):
@@ -12,6 +13,9 @@ class RNet_population:
         self.RNpopulation = []
         for n in range(self.num_individuals):
             self.RNpopulation.append(Random_Network())
+            
+#    def __getitem__(self,index):
+#        return self.RNpopulation[index]         
     
     def pop_fitness(self, X_train, X_test, y_train, y_test): #calcola il fitness
         for RandNet in self.RNpopulation:
@@ -70,7 +74,8 @@ class Random_Network:
     def RNfitness(self, X_train, X_test, y_train, y_test): 
         #Metodi di MLPCassifier 
         tpl = tuple(self.genome)
-        net = MLPClassifier(hidden_layer_sizes = tpl, activation = 'logistic')
+        net = MLPClassifier(hidden_layer_sizes = tpl, activation = 'relu', alpha = 1,
+                            learning_rate = 'constant' , learning_rate_init = 0.001)
         #MLPClassifier(hidden_layer_sizes = tpl,
         #                                  alpha = 1, activation = 'relu')
         
@@ -90,13 +95,13 @@ class Random_Network:
         #mutazione, può anche allungare o accorciare il genoma di 1 carattere
         x = randint(0,100)
         y = randint(0,100)
-        if x < 30:
-            if x < 15:
+        if x < 10:
+            if x < 5:
                 self.genome.append(randint(1,100))
             elif len(self.genome) != 1:
                 z = randint(0,self.num_hidden_layers - 1)
                 del self.genome[z]
-        if y < 30:
+        if y < 10:
             z = randint(0,len(self.genome) - 1)
             self.genome[z] = randint(1,100)
         
