@@ -66,7 +66,7 @@ classifiers = [
         #prove casuali con varie tuple                               relu default
         
     ##############################################################################
-    MLPClassifier(hidden_layer_sizes=(28, 51, 12, 33),alpha=1,
+    MLPClassifier(hidden_layer_sizes=(71, 71,20),alpha=1,
                   activation = 'relu',random_state = 1), #one layer, size 100
     ##############################################################################
     
@@ -84,7 +84,7 @@ linearly_separable = (X, y)
 #####################################################################
 
 datasets = [
-            make_moons(n_samples = 100,noise=0.25, random_state=1),
+            make_moons(n_samples = 100,noise=0.2, random_state=1),
             make_circles(n_samples = 100,noise=0.2, factor=0.5, random_state=1),
             linearly_separable
             ]

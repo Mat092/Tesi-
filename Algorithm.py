@@ -6,12 +6,12 @@ from random import randint
 import MLPClassifier_ as MLP
 
 def algorithm():
-    generation = MLP.RNet_population(4)
+    generation = MLP.RNet_population(10)
     gen = 1
     
     #dataset = make_circles(n_samples = 100,noise=0.2,factor = 0.5, random_state = 1)
     #rnstate = randint(1,100)
-    dataset = make_moons(n_samples = 100, noise = 0.27,random_state=1)
+    dataset = make_moons(n_samples = 100, noise = 0.2,random_state=1)
         
         
     #per datasets
@@ -31,71 +31,67 @@ def algorithm():
     while generation.Best_Score() < 1: #continua fino a fitness = 1
         
         if gen == 1: 
-           generation.pop_fitness(X_train, X_test, y_train, y_test)
+           generation.pop_fitness(X_train, X_test, y_train, y_test,X,y)
            generation.medium_pop_fitness()
            generation.shortBubbleSort()
-           print ('\n',"Generazione",'\t', gen)
-           print("num_Individuals = ", generation.num_individuals,'\n')
+           print ('\n',"Generazione",'\t', gen,sep = None)
+           print("num_Individuals = ", generation.num_individuals)
            #generation.Print_pop()
            print("************Best Net**********")
            generation.Print_Best()
-           print("********************************")
+           print("*******************************")
+           if generation.Best_Score() == 1:
+               break
         
+        generation.calc_proba()
         Next_gen = MLP.RNet_population(0)
-        #Creazione della nuova generazione
         
-        for i in range(len(generation.RNpopulation)):
-            if len(Next_gen.RNpopulation) >= len(generation.RNpopulation):
-                break
-            rnd = randint(i,len(generation.RNpopulation)-1)
-            tpl = generation.RNpopulation[i].Crossover1(generation.RNpopulation[rnd])
-            Next_gen.RNpopulation.append(tpl[0])
-            Next_gen.RNpopulation.append(tpl[1])
-            
-            
-#            for j in range(i + 1,len(generation.RNpopulation)):
-#                if len(Next_gen.RNpopulation) >= len(generation.RNpopulation):
-#                    break
-#                tpl =generation.RNpopulation[i].Crossover1(generation.RNpopulation[j])
-#                Next_gen.RNpopulation.append(tpl[0])
-#                Next_gen.RNpopulation.append(tpl[1])
-                
-        
-#        #Creazione della nuova generazione
-#        parents = MLP.RNet_population(0)
-#        for i in range(generation.num_individuals):    #Seleziono i genitori
-#            prb = randint(0,85) / 100
-#            if generation[i].fitness > prb:
-#                parents.RNpopulation.append(generation[i])
-#        parents.num_individuals = len(parents.RNpopulation)   
-#        
-#        for i in range(parents.num_individuals):
-#            if len(Next_gen.RNpopulation) >= generation.num_individuals:
+########################################################################################
+        #Scelta casuale dei genitori basata sul fitness
+        while len(Next_gen.RNpopulation) < len(generation.RNpopulation):
+            x = randint(0,100) / 100
+            previous_proba = 1.0
+            for i in range(len(generation.RNpopulation)-1):
+                if generation.RNpopulation[i].prob < x < previous_proba :
+                    y = randint(0,100) / 100
+                    previous_proba2 = 1.0
+                    for j in range(len(generation.RNpopulation)-1):
+                        if (generation.RNpopulation[j].prob < y < previous_proba2) :
+                            tpl = generation.RNpopulation[i].Crossover1(generation.RNpopulation[j])
+                            Next_gen.RNpopulation.append(tpl[0])
+                            Next_gen.RNpopulation.append(tpl[1])
+                        previous_proba2 = generation.RNpopulation[j].prob
+                previous_proba = generation.RNpopulation[i].prob
+###################################################################################################            
+                    
+                #Selezione randomica del secondo elemento
+                #il primo va in ordine 
+    
+#        for i in range(len(generation.RNpopulation)):
+#            if len(Next_gen.RNpopulation) >= len(generation.RNpopulation):
 #                break
-#            for j in range(i,parents.num_individuals):
-#                if len(Next_gen.RNpopulation) >= generation.num_individuals:
-#                    break
-#                tpl = parents[i].Crossover1(parents[j])
-#                Next_gen.RNpopulation.append(tpl[0])
-#                Next_gen.RNpopulation.append(tpl[1])
-        
-#        Next_gen.num_individuals = len(Next_gen.RNpopulation) 
-            
+#            rnd = randint(i,len(generation.RNpopulation)-1)
+#            tpl = generation.RNpopulation[i].Crossover1(generation.RNpopulation[rnd])
+#            Next_gen.RNpopulation.append(tpl[0])
+#            Next_gen.RNpopulation.append(tpl[1])
+                
+######################################################################################
+                
         generation = Next_gen
         del Next_gen
         
         #Mutazioni casuali 
-        for i in range(generation.num_individuals):
+        for i in range(len(generation.RNpopulation) - 1):
             generation.RNpopulation[i].Mutation()
         
-        generation.pop_fitness(X_train, X_test, y_train, y_test)
+        generation.pop_fitness(X_train, X_test, y_train, y_test,X,y)
         
         #Calcolo fitness e ordino gli individui 
         generation.medium_pop_fitness()
         generation.shortBubbleSort()
         
         gen = gen + 1
-        print ("Generazione",'\t', gen)
+        print ("Generazione",'\t', gen,sep = None)
         print("num_Individuals = ", len(generation.RNpopulation),'\n')
         #generation.Print_pop()
         print("************Best Net**********")

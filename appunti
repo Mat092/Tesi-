@@ -1,0 +1,85 @@
+Appunti 
+
+24/08/18
+
+	ho scritto un programma che genera una popolazione casuale di reti, identificate da una lista di numeri da 1 a 100 che rappresenta 
+gli hidden_layer della rete, la quale è effettivamente creata e utilizzata solo nella funzione che si occupa di calcolare il fitness dell'
+individuo
+Ciò è possibile grazie al codice fornito dalla libreria scikit_learn di python, in particolare dalla classe MLPClassifier.
+Il programma poi si occupa di cercare la rete che possa raggiungere il punteggio più alto possibile nella classificazione di punti separati in 
+due classi tramite metodi tipici degli algoritmi genetici, che mimano la selezione naturale ("survival of the fittest")
+il fitness degli individui è misurato prima addestrandolo grazie alla funzione MLPClassifier.fit() e, poi, misurando il suo "score" nel 
+riconoscimento delle due classi di punti su un diverso set di dati.
+
+Entrando in dettaglio, viene generato un set di dati chiamato "moons" da "sklearn.dataset.make_moons()" che restituisce i punti di due 
+coordinat("X")e e la classe a cui appartengono ("y") in forma di array. Questi vengono separati in due parti, train e test, le quali fungeranno rispettivamente da addestramento e test per le reti
+Per ora i dataset sono sempre uguali per ogni rete e per ogni generazione, tramite il "random_state" di make_moons sarebbe possibile cambiare 
+di volta in volta il dataset.
+Un' altra variabile da tenere in considerazione è il "noise" del dataset: un noise troppo alto sembra rendere impossibile all'algoritmo il
+classificare ogni punto.
+
+Dopodiche, si entra in un "while" che si ferma solo quando la rete "perfetta" (con fitness/score = 1.0) è trovata. Questa non è unica per 
+dataset, nè DEVE essere la migliore: è possibile infatti trovare diverse reti con più o meno layer e più o meno neuroni che ottengono lo stesso
+punteggio.
+
+Alla prima generazione vengono subito calcolati i fitness dell'intera popolazione e questa viene ordinata in base allo score degli elementi 
+tramite unn bubble_sort dal più alto al più basso. Sarebbe possibile ordinare le reti anche in base ad altri parametri (tipo il numero di 
+neuroni e di layer, che inevitabilemente determinano anche il numero di collegamenti e pesi della rete) dato che è molto facile trovare reti
+con punteggi uguali. In tal caso per ora la scelta è casuale, infatti le reti non vengono sposate in caso di fitness uguali. potremmo esplorare
+famiglie di reti completamente diverse?
+Viene inoltre stampata a schermo la rete migliore, insieme al fitness medio della popolazione.
+
+La parte di programma con più difficoltà è quella che genera la generazione successiva, ed in particolare il modo di selezionare
+i "genitori" della nuova popolazione. Ad ora viene assegnata una probabilità ad ogni elemento in abse al suo fitness, in particolare:
+
+probabilità_individuo = (fitness_individuo) / (somma di tutti i fitness)
+
+in questo modo la probabilità è normalizzata ad 1 e l'elemento con fitness più alto ha maggiore probabilità di essere scelto come genitore,
+per mantenere (in parte) i suoi hidden_layer. È possibile che un individuo venga scelto 2 volte, come primo e secondo genitore, ma non sono
+sicuro di questo passaggio.
+Il metodo è chiamato "Roulette_wheel"(o almeno credo)
+
+La funzione che genera in figli è "Crossover1", che taglia i due genomi genitori in parti differenti generando due interi casuali. Ad esempio:
+
+rndint1 = 3
+rndint2 = 2
+
+genitore1 = [3,6,7,8,9]
+genitore2 = [1,10,4,5]
+
+figlio1 = [3,6,7,4,5]
+figlio2 = [1,10,8,9]
+
+i due figli saranno parte della nuova popolazione, che avrà lo stesso numero di individui della generazioen precedente.
+Con questo metodo è possibile esplorare anche varie lunghezze di genoma, diverse dalle lunghezze iniziali dei genitori.
+
+in seguito la popolazione appena creata viene sottoposta ad una mutazione casuale: ogni elemento ha il 10% di possibilià di essere allungato
+o accorciato (con stessa probabilità) di un carattere casuale, ed il 10% di vedere un proprio layer modificato casualmente, mimando ciò che 
+avviene in una mutazione casuale in natura.
+
+la popolazione viene di nuovo valutata e ordinata di conseguenza e il ciclo ricomincia.
+
+
+Come riferimenti per la teoria sulle reti neurali per ora ho il libro di Michael Nielsen "Neural Network e Deep learning", mentre per gli 
+algoritmi genetici non ho ancora riferimenti precisi, ma mi sono affidato a wikipedia ed altri siti internet, almeno per quanto riguarda
+gli algoritmi di base di questa logica.
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

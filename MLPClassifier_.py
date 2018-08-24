@@ -2,6 +2,7 @@
 #import matplotlib.pyplot as plt
 #from matplotlib.colors import ListedColormap
 from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import cross_val_score
 from random import randint
 
 
@@ -21,15 +22,24 @@ class RNet_population:
         for ind in range (len(self.RNpopulation)):
             self.RNpopulation[ind].cal_Neurons_product()
     
-    def pop_fitness(self, X_train, X_test, y_train, y_test): #calcola il fitness
+    def pop_fitness(self, X_train, X_test, y_train, y_test,X,y): #calcola il fitness
         for RandNet in self.RNpopulation:
-            RandNet.RNfitness(X_train, X_test, y_train, y_test)
+            RandNet.RNfitness(X_train, X_test, y_train, y_test,X,y)
     
     def medium_pop_fitness(self): #calcola il fitness medio della popolazione
         fitness_tot = 0
         for RandNet in self.RNpopulation:
             fitness_tot = fitness_tot + RandNet.fitness
-        self.medium_fitness = fitness_tot / len(self.RNpopulation)
+        self.medium_fitness = round(fitness_tot / len(self.RNpopulation),2)
+    
+    def calc_proba(self):
+        fitness_sum = 0.0
+        for i in range(len(self.RNpopulation)-1):
+            fitness_sum = fitness_sum + self.RNpopulation[i].fitness
+        for i in range(len(self.RNpopulation)-1):
+            self.RNpopulation[i].prob = round(self.RNpopulation[i].fitness / fitness_sum,
+                                                2)
+        
        
     def BubbleSort(self): #se voglio ordinarli anche per numero di neuroni
         self.pop_Neurons_product()
@@ -72,29 +82,29 @@ class RNet_population:
         for ind in self.RNpopulation:
             ind.Print_RNet()
             
-        
-        
 class Random_Network:
     
     def __init__(self):
         self.fitness = 0
+        self.prob = 0
         self.genome = []
         self.Neurons_product = 0
         self.num_hidden_layers = randint(1,10)
         for n in range(self.num_hidden_layers):
             self.genome.append(randint(1,100))
             
-    def RNfitness(self, X_train, X_test, y_train, y_test): 
+    def RNfitness(self, X_train, X_test, y_train, y_test,X,y): 
         #Metodi di MLPCassifier 
         tpl = tuple(self.genome)
-        net = MLPClassifier(hidden_layer_sizes = tpl, activation = 'relu', alpha = 1,
+        net = MLPClassifier(hidden_layer_sizes = tpl, 
+                            activation = 'relu',solver = 'adam',
+                            alpha = 1, #???
                             learning_rate = 'constant' , learning_rate_init = 0.001,
-                            random_state = 1)
-        #MLPClassifier(hidden_layer_sizes = tpl,
-        #                                  alpha = 1, activation = 'relu')
-        
+                            random_state = 1,
+                            early_stopping = True, validation_fraction = 0.1)
         net.fit(X_train, y_train)
-        self.fitness = net.score(X_test, y_test)            
+        #scores = cross_val_score(net,X_train,y_train,cv = None)
+        self.fitness = net.score(X_test,y_test)            
         
     def Crossover1(self, RandNet): #sommo i contributi tagliati in x e y 
         son1 = Random_Network()                  #dalle due network
@@ -102,9 +112,9 @@ class Random_Network:
         x = randint(0,len(self.genome))
         y = randint(0,len(RandNet.genome))
         son1.genome = self.genome[:x] + RandNet.genome[y:]
-        son2.genome = self.genome[x:] + RandNet.genome[:y]
+        son2.genome = RandNet.genome[:y] + self.genome[x:]  
         return son1,son2
-            
+    
     def Mutation(self):
         #mutazione, può anche allungare o accorciare la rete di 1 layer
         x = randint(0,100)
