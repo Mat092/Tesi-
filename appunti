@@ -64,6 +64,25 @@ Come riferimenti per la teoria sulle reti neurali per ora ho il libro di Michael
 algoritmi genetici non ho ancora riferimenti precisi, ma mi sono affidato a wikipedia ed altri siti internet, almeno per quanto riguarda
 gli algoritmi di base di questa logica.
 
+
+25/08/18
+
+	Il programma sembra funzionare, ho aumentato la percentuale di mutazione al 30%, perché troppo spesso si "fissa" su alcuni valori di
+neuroni e li ripete per molte generazioni,anche su più layer, nonostante non siano particolarmente performanti.
+
+ho implementato un diverso metodo di selezione più chiaro che non è molto diverso dal precedente ed ho risolto un altro errore logico 
+del programma di cui non mi ero accorto precedentemente dovuto all' output di "range(len(stringa))" che era precedentemente
+ "range(len(stringa)-1)" perchè pensavo che la prima versione sarebbe andata out of range in un ciclo "for"
+
+Il primo individuo di ogni generazione mi sembra troppo avvantaggiato rispetto agli altri, ma ad ora non saprei come ovviare al problema
+e comuqnue la scelta del primo rimane casuale, tuttavia nella selezione appare troppe volte, dalle prove eseguite succede spesso che sia 
+l'unico selezionato per la generazione, finendo per essere l'unico genitore della generazione successiva, ciò non favorisce la diversità, ma 
+la percentuale di mutazione unita al crossover casuale per ogni coppia di genitori sembrano ovviare al problema.
+ 
+ho inserito la variabile "exclude", cosi che almeno il secondo genitore debba essere necessariamente diverso dal primo 
+
+ho iniziato a implementare la libreria matplotlib per costruire qualche grafico di ciò che sta succedendo.	
+
   
 
 

@@ -34,9 +34,9 @@ class RNet_population:
     
     def calc_proba(self):
         fitness_sum = 0.0
-        for i in range(len(self.RNpopulation)-1):
+        for i in range(len(self.RNpopulation)):
             fitness_sum = fitness_sum + self.RNpopulation[i].fitness
-        for i in range(len(self.RNpopulation)-1):
+        for i in range(len(self.RNpopulation)):
             self.RNpopulation[i].prob = round(self.RNpopulation[i].fitness / fitness_sum,
                                                 2)
         
@@ -44,8 +44,8 @@ class RNet_population:
     def BubbleSort(self): #se voglio ordinarli anche per numero di neuroni
         self.pop_Neurons_product()
         sort = Random_Network()
-        for ind1 in range(len(self.RNpopulation)-1):
-            for ind2 in range(ind1,len(self.RNpopulation)-1,1):
+        for ind1 in range(len(self.RNpopulation)):
+            for ind2 in range(ind1,len(self.RNpopulation),1):
                 if self.RNpopulation[ind1].fitness < self.RNpopulation[ind2].fitness:
                     sort = self.RNpopulation[ind1]
                     self.RNpopulation[ind1] = self.RNpopulation[ind2]
@@ -119,13 +119,13 @@ class Random_Network:
         #mutazione, può anche allungare o accorciare la rete di 1 layer
         x = randint(0,100)
         y = randint(0,100)
-        if x < 10:
-            if x < 5:
+        if x < 30:
+            if x < 15:
                 self.genome.append(randint(1,100))
             elif len(self.genome) - 1 and len(self.genome):
                 z = randint(0,len(self.genome) - 1)
                 del self.genome[z]
-        if y < 10:
+        if y < 30:
             if len(self.genome) - 1 and len(self.genome):
                 z = randint(0,len(self.genome) - 1)
                 self.genome[z] = randint(1,100)
