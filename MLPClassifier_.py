@@ -1,15 +1,11 @@
-#import numpy as np
-#import matplotlib.pyplot as plt
-#from matplotlib.colors import ListedColormap
 from sklearn.neural_network import MLPClassifier
-from sklearn.model_selection import cross_val_score
 from random import randint
 
 
 class RNet_population:
     
     def __init__(self,num_individuals = 10):
-        self.medium_fitness = 0
+        self.mean_fitness = 0
         self.num_individuals = num_individuals
         self.RNpopulation = []
         for n in range(self.num_individuals):
@@ -22,15 +18,15 @@ class RNet_population:
         for ind in range (len(self.RNpopulation)):
             self.RNpopulation[ind].cal_Neurons_product()
     
-    def pop_fitness(self, X_train, X_test, y_train, y_test,X,y): #calcola il fitness
+    def pop_fitness(self, X_train, X_test, y_train, y_test): #calcola il fitness
         for RandNet in self.RNpopulation:
-            RandNet.RNfitness(X_train, X_test, y_train, y_test,X,y)
+            RandNet.RNfitness(X_train, X_test, y_train, y_test)
     
     def medium_pop_fitness(self): #calcola il fitness medio della popolazione
         fitness_tot = 0
         for RandNet in self.RNpopulation:
             fitness_tot = fitness_tot + RandNet.fitness
-        self.medium_fitness = round(fitness_tot / len(self.RNpopulation),2)
+        self.mean_fitness = round(fitness_tot / len(self.RNpopulation),2)
     
     def calc_proba(self):
         fitness_sum = 0.0
@@ -39,7 +35,6 @@ class RNet_population:
         for i in range(len(self.RNpopulation)):
             self.RNpopulation[i].prob = round(self.RNpopulation[i].fitness / fitness_sum,
                                                 2)
-        
        
     def BubbleSort(self): #se voglio ordinarli anche per numero di neuroni
         self.pop_Neurons_product()
@@ -72,7 +67,7 @@ class RNet_population:
            passnum = passnum - 1
         
     def Print_Best(self): #After Bubble_sort
-        print("mean fitness: ",self.medium_fitness)
+        print("mean fitness: ",self.mean_fitness)
         self.RNpopulation[0].Print_RNet()
         
     def Best_Score(self):       #after Bubble sort
@@ -93,7 +88,7 @@ class Random_Network:
         for n in range(self.num_hidden_layers):
             self.genome.append(randint(1,100))
             
-    def RNfitness(self, X_train, X_test, y_train, y_test,X,y): 
+    def RNfitness(self, X_train, X_test, y_train, y_test): 
         #Metodi di MLPCassifier 
         tpl = tuple(self.genome)
         net = MLPClassifier(hidden_layer_sizes = tpl, 

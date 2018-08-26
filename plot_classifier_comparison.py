@@ -66,8 +66,12 @@ classifiers = [
         #prove casuali con varie tuple                               relu default
         
     ##############################################################################
-    MLPClassifier(hidden_layer_sizes=(71, 71,20),alpha=1,
-                  activation = 'relu',random_state = 1), #one layer, size 100
+    MLPClassifier(hidden_layer_sizes = (10, 26, 21, 81), 
+                            activation = 'relu',solver = 'adam',
+                            alpha = 1, #???
+                            learning_rate = 'constant' , learning_rate_init = 0.001,
+                            random_state = 1,
+                            early_stopping = False, validation_fraction = 0.1)
     ##############################################################################
     
 #    AdaBoostClassifier(),
@@ -85,7 +89,7 @@ linearly_separable = (X, y)
 
 datasets = [
             make_moons(n_samples = 100,noise=0.2, random_state=1),
-            make_circles(n_samples = 100,noise=0.2, factor=0.5, random_state=1),
+            make_circles(n_samples = 100,noise=0.15, factor=0.4, random_state=1),
             linearly_separable
             ]
 #####################################################################
@@ -114,6 +118,7 @@ for ds_cnt, ds in enumerate(datasets):
     # just plot the dataset first
     cm = plt.cm.RdBu
     cm_bright = ListedColormap(['#FF0000', '#0000FF'])
+                                
     ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
     if ds_cnt == 0:
         ax.set_title("Input data")
