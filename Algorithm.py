@@ -152,13 +152,13 @@ def algorithm():
         generation.Print_Best()
         print("********************************")
         
-#    plt.figure()
-#    plt.subplot(211)
-#    plt.plot(lst_gen,lst_mean_fitness)
-#    
-#    plt.subplot(212)
-#    plt.plot(lst_gen,lst_best_fitness) 
-#    plt.show()
+    plt.figure()
+    plt.subplot(211)
+    plt.plot(lst_gen,lst_mean_fitness,'fitness medio')
+    
+    plt.subplot(212)
+    plt.plot(lst_gen,lst_best_fitness,'miglior fitness') 
+    plt.show()
 ##############################################################################
         #GRAFICI
     figure = plt.figure()   

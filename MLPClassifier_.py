@@ -33,8 +33,8 @@ class RNet_population:
         for i in range(len(self.RNpopulation)):
             fitness_sum = fitness_sum + self.RNpopulation[i].fitness
         for i in range(len(self.RNpopulation)):
-            self.RNpopulation[i].prob = round(self.RNpopulation[i].fitness / fitness_sum,
-                                                2)
+            self.RNpopulation[i].prob = round(self.RNpopulation[i].fitness 
+                                                     / fitness_sum,2)
        
     def BubbleSort(self): #se voglio ordinarli anche per numero di neuroni
         self.pop_Neurons_product()
@@ -53,7 +53,7 @@ class RNet_population:
                     self.RNpopulation[ind1] = self.RNpopulation[ind2]
                     self.RNpopulation[ind2] = sort
                     
-    def shortBubbleSort(self): #ordina la popolazione per fitness
+    def shortBubbleSort(self): #ordina la popolazione per fitness, trovato online
         exchanges = True
         passnum = len(self.RNpopulation)-1
         while passnum > 0 and exchanges:
