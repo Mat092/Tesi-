@@ -84,9 +84,9 @@ class Random_Network:
         self.prob = 0
         self.genome = []
         self.Neurons_product = 0
-        self.num_hidden_layers = randint(1,10)
+        self.num_hidden_layers = randint(1,4)
         for n in range(self.num_hidden_layers):
-            self.genome.append(randint(1,100))
+            self.genome.append(randint(1,50))
             
     def RNfitness(self, X_train, X_test, y_train, y_test): 
         #Metodi di MLPCassifier 
@@ -116,18 +116,18 @@ class Random_Network:
         y = randint(0,100)
         if x < 30:
             if x < 15:
-                self.genome.append(randint(1,100))
+                self.genome.append(randint(1,50))
             elif len(self.genome) - 1 and len(self.genome):
                 z = randint(0,len(self.genome) - 1)
                 del self.genome[z]
         if y < 30:
             if len(self.genome) - 1 and len(self.genome):
                 z = randint(0,len(self.genome) - 1)
-                self.genome[z] = randint(1,100)
+                self.genome[z] = randint(1,50)
             elif len(self.genome) :
-                self.genome[0] = randint(1,100)
+                self.genome[0] = randint(1,50)
             else :
-                self.genome.append(randint(1,100))
+                self.genome.append(randint(1,50))
                 
     def cal_Neurons_product(self):
         num = 1

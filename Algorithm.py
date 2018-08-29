@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_moons, make_circles #, make_classification
-from sklearn import datasets
+#from sklearn import datasets
 from random import randint,random
 import MLPClassifier_ as MLP
 from sklearn.neural_network import MLPClassifier
@@ -35,25 +35,24 @@ def algorithm():
 #        Data_train, data_test, target_train, target_test = \
 #            train_test_split(Data,Target,test_size =.4,random_state = 42)
     
+    generation.pop_fitness(X_train, X_test, y_train, y_test)
+    generation.medium_pop_fitness()
+    generation.shortBubbleSort()
+   
+    lst_mean_fitness.append(generation.mean_fitness)
+    lst_best_fitness.append(generation.Best_Score())
+    lst_gen.append(gen)
+   
+    print ('\n',"Generazione",'\t', gen,sep = None)
+    print("num_Individuals = ", generation.num_individuals)
+    #generation.Print_pop()
+    print("************Best Net**********")
+    generation.Print_Best()
+    print("*******************************") 
+    
+    
+    
     while generation.Best_Score() < 1: #continua fino a fitness = 1
-        
-        if gen == 1: 
-           generation.pop_fitness(X_train, X_test, y_train, y_test)
-           generation.medium_pop_fitness()
-           generation.shortBubbleSort()
-           
-           lst_mean_fitness.append(generation.mean_fitness)
-           lst_best_fitness.append(generation.Best_Score())
-           lst_gen.append(gen)
-           
-           print ('\n',"Generazione",'\t', gen,sep = None)
-           print("num_Individuals = ", generation.num_individuals)
-           #generation.Print_pop()
-           print("************Best Net**********")
-           generation.Print_Best()
-           print("*******************************") 
-           if generation.Best_Score() == 1:
-               break
         
         generation.calc_proba()
         Next_gen = MLP.RNet_population(0)
@@ -154,10 +153,10 @@ def algorithm():
         
     plt.figure()
     plt.subplot(211)
-    plt.plot(lst_gen,lst_mean_fitness,'fitness medio')
+    plt.plot(lst_gen,lst_mean_fitness)
     
     plt.subplot(212)
-    plt.plot(lst_gen,lst_best_fitness,'miglior fitness') 
+    plt.plot(lst_gen,lst_best_fitness) 
     plt.show()
 ##############################################################################
         #GRAFICI
