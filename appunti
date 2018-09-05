@@ -8,8 +8,8 @@ individuo
 Ciò è possibile grazie al codice fornito dalla libreria scikit_learn di python, in particolare dalla classe MLPClassifier.
 Il programma poi si occupa di cercare la rete che possa raggiungere il punteggio più alto possibile nella classificazione di punti separati in 
 due classi tramite metodi tipici degli algoritmi genetici, che mimano la selezione naturale ("survival of the fittest")
-il fitness degli individui è misurato prima addestrandolo grazie alla funzione MLPClassifier.fit() e, poi, misurando il suo "score" nel 
-riconoscimento delle due classi di punti su un diverso set di dati.
+il fitness degli individui è misurato prima addestrandoli grazie alla funzione MLPClassifier.fit() e poi misurando il loro "score" nel 
+riconoscimento delle due classi di punti su un set di dati diverso da quello di training.
 
 Entrando in dettaglio, viene generato un set di dati chiamato "moons" da "sklearn.dataset.make_moons()" che restituisce i punti di due 
 coordinat("X")e e la classe a cui appartengono ("y") in forma di array. Questi vengono separati in due parti, train e test, le quali fungeranno rispettivamente da addestramento e test per le reti
@@ -86,11 +86,11 @@ ho iniziato a implementare la libreria matplotlib per costruire qualche grafico 
   
 
 http://www.boente.eti.br/fuzzy/ebook-fuzzy-mitchell.pdf   Melanie Mitchell - an introduction to genetic algorithm 
-
+	-Baldwin Effect 67
 
 http://citeseerx.ist.psu.edu/viewdoc/citations;jsessionid=ED993CF9D0BCBD42A73A265B77E5CC82?doi=10.1.1.44.5416 citeseer con genetic algorithm 
 
-
+http://neuralnetworksanddeeplearning.com               michael nielsen- neural network and deep learning
 
 
 

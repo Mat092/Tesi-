@@ -66,7 +66,7 @@ classifiers = [
         #prove casuali con varie tuple                               relu default
         
     ##############################################################################
-    MLPClassifier(hidden_layer_sizes = (20, 96, 96, 96, 9), 
+    MLPClassifier(hidden_layer_sizes = (13, 16), 
                             activation = 'relu',solver = 'adam',
                             alpha = 1, #???
                             learning_rate = 'constant' , learning_rate_init = 0.001,
@@ -105,7 +105,7 @@ for ds_cnt, ds in enumerate(datasets):
     X, y = ds
     X = StandardScaler().fit_transform(X)
     X_train, X_test, y_train, y_test = \
-        train_test_split(X, y, test_size=.4, random_state=1)
+        train_test_split(X, y, test_size=.4, random_state=179)
 
     ############################################################
 
