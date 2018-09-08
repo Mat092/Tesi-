@@ -1,5 +1,5 @@
 from matplotlib.colors import ListedColormap
-import MLPClassifier_ as MLP
+import Network_classes as MLP
 import matplotlib.pyplot as plt
 import numpy as np
 from random import randint, uniform 

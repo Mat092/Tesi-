@@ -1,4 +1,4 @@
-import MLPClassifier_ as MLP
+import Network_classes as MLP
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
