@@ -1,6 +1,8 @@
 from sklearn.neural_network import MLPClassifier
-from random import randint,uniform
-
+from random import uniform #,randint
+from numpy.random import randint
+import numpy as np
+from sklearn.metrics import log_loss, accuracy_score
 
 class RNet_population:
     
@@ -22,18 +24,14 @@ class RNet_population:
     def pop_fitness(self, X_train, X_test, y_train, y_test): #calcola il fitness
         for RandNet in self.RNpopulation:
             RandNet.RNfitness(X_train, X_test, y_train, y_test)
+            
+    def update_mean_fitness(self):
         fitness_tot = 0
-        
         for i in range(len(self.RNpopulation)): 
             fitness_tot = fitness_tot + self.RNpopulation[i].fitness
         self.fitness_sum = fitness_tot
-        self.mean_fitness = round(fitness_tot / len(self.RNpopulation),2)
+        self.mean_fitness = round(fitness_tot / len(self.RNpopulation),3)
         
-        for i in range(len(self.RNpopulation)):
-            self.RNpopulation[i].prob = (self.RNpopulation[i].fitness / 
-                                         self.fitness_sum)
-                                        
-       
     def BubbleSort(self): #se voglio ordinarli anche per numero di neuroni
         self.pop_Neurons_product()
         sort = Random_Network()
@@ -80,35 +78,49 @@ class Random_Network:
     
     def __init__(self):
         self.links = 0
-        self.max_neurons = 25
+        self.max_neurons = 50
         self.fitness = 0
         self.prob = 0
         self.genome = []
         self.Neurons_product = 0
-        self.num_hidden_layers = randint(1,5)
+        self.num_hidden_layers = randint(1,10)
         for n in range(self.num_hidden_layers):
             self.genome.append(randint(1,self.max_neurons))
             
-    def RNfitness(self, X_train, X_test, y_train, y_test): 
-        #Metodi di MLPCassifier 
+    def RNfitness(self, X_train, X_test, y_train, y_test):  
         tpl = tuple(self.genome)
         net = MLPClassifier(hidden_layer_sizes = tpl, 
                             activation = 'relu',solver = 'adam',
-                            alpha = 1, #???
+                            alpha = 0.001,
                             learning_rate = 'constant' , learning_rate_init = 0.001,
-                            random_state = 1,
-                            early_stopping = True, validation_fraction = 0.1)
+                            #random_state = 1,
+                            tol = 0.0001,
+                            early_stopping = False , validation_fraction = 0.1)
         net.fit(X_train, y_train)
-        self.fitness = net.score(X_test,y_test)
+        
+        #log_loss score
+        #y_p = net.predict_proba(X_test)
+        #score = log_loss(y_test,y_p)
+        
+        #accuracy score
+        y_p = net.predict(X_test)
+        score = accuracy_score(y_test,y_p)
+        
+        #score
+        #score = net.score(X_test,y_test)
+        self.scorer = net
+        self.fitness = score
         self.update_links()            
         
     def Crossover1(self, RandNet): #sommo i contributi tagliati in x e y 
-        Crv_ratio = 1.01
-        son1 = Random_Network()                  #dalle due network
+        Crv_ratio = 1.01           #dalle due network
+        son1 = Random_Network()                  
         son2 = Random_Network()
         if uniform(0,1) < Crv_ratio:
-            x = randint(0,len(self.genome))
-            y = randint(0,len(RandNet.genome))
+            x = randint(0,len(self.genome)+1,size = 3)
+            y = randint(0,len(RandNet.genome)+1,size = 3)
+            x = int(np.median(x))
+            y = int(np.median(y))
             son1.genome = self.genome[:x] + RandNet.genome[y:]
             son2.genome = RandNet.genome[:y] + self.genome[x:]
         else :
@@ -120,13 +132,12 @@ class Random_Network:
         #mutazione, può anche allungare o accorciare la rete di 1 layer
         x = randint(0,100)
         y = randint(0,100)
-        if x < 30:
-            if x < 5:
+        if x < 5:
+            if x < 2.5:
                 self.genome.append(randint(1,self.max_neurons))
-            elif len(self.genome) - 1 and len(self.genome):
-                z = randint(1,len(self.genome) - 1)
-                del self.genome[z]
-        if y < 30:
+            elif len(self.genome):
+                self.genome.pop()
+        if y < 5:
             if len(self.genome) - 1 and len(self.genome):
                 z = randint(0,len(self.genome) - 1)
                 self.genome[z] = randint(1,self.max_neurons)

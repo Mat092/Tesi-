@@ -35,6 +35,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_moons, make_circles, make_classification
 from sklearn.neural_network import MLPClassifier
+from random import randint 
 #from sklearn.neighbors import KNeighborsClassifier
 #from sklearn.svm import SVC
 #from sklearn.gaussian_process import GaussianProcessClassifier
@@ -66,11 +67,12 @@ classifiers = [
         #prove casuali con varie tuple                               relu default
         
     ##############################################################################
-    MLPClassifier(hidden_layer_sizes = (13, 16), 
+    MLPClassifier(hidden_layer_sizes = (28, 24, 32, 9, 22, 29, 23), 
                             activation = 'relu',solver = 'adam',
-                            alpha = 1, #???
+                            alpha = 0.001, 
                             learning_rate = 'constant' , learning_rate_init = 0.001,
                             random_state = 1,
+                            tol = 0.0001,
                             early_stopping = False, validation_fraction = 0.1)
     ##############################################################################
     
@@ -84,13 +86,23 @@ rng = np.random.RandomState(2)
 X += 2 * rng.uniform(size=X.shape)
 linearly_separable = (X, y)
 
+dataset1 = make_circles(n_samples = 50,noise=0.1,factor = 0.3, random_state = 1)
+dataset2 = make_circles(n_samples = 100,noise=0.1, factor = 0.65, random_state = 1)
+for i in range(len(dataset1[1])):
+        dataset1[1][i] = 0
+X1,y1 = dataset1
+X2,y2 = dataset2
+X = np.concatenate((X1,X2),axis = 0)
+y = np.concatenate((y1,y2),axis = 0)
+circles = X, y
+
 
 #####################################################################
 
 datasets = [
             make_moons(n_samples = 100,noise=0.2, random_state=1),
             make_circles(n_samples = 100,noise=0.2, factor=0.4, random_state=1),
-            linearly_separable
+            circles
             ]
 #####################################################################
 
@@ -102,11 +114,12 @@ for ds_cnt, ds in enumerate(datasets):
     ############################################################
     #ROBE SUI DATASETS
     # preprocess dataset, split into training and test part
+   
     X, y = ds
     X = StandardScaler().fit_transform(X)
     X_train, X_test, y_train, y_test = \
-        train_test_split(X, y, test_size=.4, random_state=179)
-
+        train_test_split(X, y, test_size=.4, random_state=randint(0,100))
+    
     ############################################################
 
     x_min, x_max = X[:, 0].min() - .5, X[:, 0].max() + .5
@@ -141,9 +154,9 @@ for ds_cnt, ds in enumerate(datasets):
         ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
         
         ###############################################################
-        #è praticamente il mio fitness!
+        #è il mio fitness!
         clf.fit(X_train, y_train)
-        score = clf.score(X_test, y_test) #molto importante!!!
+        score = clf.score(X_test, y_test) 
 
         ################################################################
 

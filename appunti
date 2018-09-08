@@ -81,9 +81,19 @@ la percentuale di mutazione unita al crossover casuale per ogni coppia di genito
  
 ho inserito la variabile "exclude", cosi che almeno il secondo genitore debba essere necessariamente diverso dal primo 
 
-ho iniziato a implementare la libreria matplotlib per costruire qualche grafico di ciò che sta succedendo.	
+ho iniziato a implementare la libreria matplotlib per costruire qualche grafico di ciò che sta succedendo.
 
-  
+i grafici ottenebili fino ad'ora sono:
+
+-frequenze relative di hidden layer 
+-miglior fitness 	
+-fitness medio	"in funzione della generazione"
+-esempio della classificazione dei punti
+
+Inoltre ora l'algoritmo si può fermare se non migliora il proprio score per alcune generazione O la rete rimane la stessa.
+
+LIBRI:
+
 
 http://www.boente.eti.br/fuzzy/ebook-fuzzy-mitchell.pdf   Melanie Mitchell - an introduction to genetic algorithm 
 	-Baldwin Effect 67
@@ -91,6 +101,33 @@ http://www.boente.eti.br/fuzzy/ebook-fuzzy-mitchell.pdf   Melanie Mitchell - an 
 http://citeseerx.ist.psu.edu/viewdoc/citations;jsessionid=ED993CF9D0BCBD42A73A265B77E5CC82?doi=10.1.1.44.5416 citeseer con genetic algorithm 
 
 http://neuralnetworksanddeeplearning.com               michael nielsen- neural network and deep learning
+
+
+
+
+Ho completamento cambiato il sistema di selezione per formare la nuova generazione: ora formo ogni coppia possibile di genitori 
+e tramite lo stesso tipo di crossover i 200 sons, di questi seleziono i dieci migliori che formeranno la generazione succ.
+Inoltre di generazione in generazione cambiano anche i dati di train e test con cui addestrare le reti.
+
+ciò che noto è che spesso l'algoritmo sembra preferire le reti ad un layer nonostante poi questa nella classificazione finale non
+ottengano dei gran punteggi, invece quando finisce per esplorare lunghezze più varie si ottengon risultati migliori:
+
+""""""""""""""""""4 immagini significative di ciò"""""""""""""""
+
+ho dovuto abilitare l'early_stopping nell'addestramento di ogni rete perchè altrimenti addestrare 200 reti era troppo lungo, inoltre ero in 
+grado di classificare il dataset selezionato in 1 o 2 generazioni, senza avere alcuna evoluzione
+
+
+in generale, l'algoritmo fa ciò che deve, ma in questo stato non sembra restituire grossi risultati, in particolare non sembra necessariamete 
+"evolvere" verso una soluzione migliore.
+
+
+
+
+
+
+
+
 
 
 
