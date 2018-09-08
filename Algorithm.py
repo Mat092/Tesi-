@@ -12,6 +12,7 @@ from selections import selection1, classifier, all_sons
   
 def algorithm():
     
+    reverse_state = False
     #data for graphs
     lst_lenghts = []
     lst_mean_fitness = []
@@ -22,13 +23,13 @@ def algorithm():
     lst_gen = []
     
     #Creating first generation
-    generation = MLP.RNet_population(20)
+    generation = MLP.RNet_population(10)
     gen = 1
            
     #datasets selection
     #dataset = make_moons(n_samples = 100, noise = 0.2,random_state=1)
-    dataset1 = make_circles(n_samples = 100,noise=0.1,factor = 0.6, random_state = 1)
-    dataset2 = make_circles(n_samples = 50,noise=0.05,factor = 0.3, random_state = 1)
+    dataset1 = make_circles(n_samples = 100,noise=0.1,factor = 0.6,random_state = 1)
+    dataset2 = make_circles(n_samples = 50,noise=0.1,factor = 0.3,random_state = 1)
     #rnstate = randint(1,100)
     
     #datasets make_moons 
@@ -53,7 +54,8 @@ def algorithm():
     generation.pop_fitness(X_train, X_test, y_train, y_test)
     #generation.shortBubbleSort()
     generation.RNpopulation = sorted(generation.RNpopulation, 
-                                     key = lambda x: x.fitness, reverse = True )
+                                     key = lambda x: x.fitness, 
+                                     reverse = reverse_state)
     generation.update_mean_fitness()
     
     last_best = [generation.Best_Score(),0,generation.RNpopulation[0].genome]
@@ -64,7 +66,7 @@ def algorithm():
     for i in range(len_max):
         count = 0
         for j in range(len(generation.RNpopulation)):
-            if i + 1 == len(generation.RNpopulation[j].genome):
+            if i + 1 == len(generation[j].genome):
                 count += 1
         lst_len_score[i].append(count) 
            
@@ -91,17 +93,18 @@ def algorithm():
     while  last_best[1] < 5: 
         
         #change to the random_state for train and test set 
-#        X_train, X_test, y_train, y_test = \
-#            train_test_split(X, y, test_size=.4, random_state=gen)   
+        X_train, X_test, y_train, y_test = \
+            train_test_split(X, y, test_size=.4, random_state=gen)   
             
         #Create new generation
         
         generation = selection1(generation,X_train, X_test, y_train, y_test)       
-        #generation = all_sons(generation,X_train, X_test, y_train, y_test)
+        #generation = all_sons(generation,X_train, X_test, y_train, y_test,reverse_state)
         
         #sort new generation and updates
         generation.RNpopulation = sorted(generation.RNpopulation, 
-                                     key = lambda x: x.fitness, reverse = True )
+                                     key = lambda x: x.fitness, 
+                                     reverse =reverse_state )
         generation.num_individuals = len(generation.RNpopulation)
         generation.update_mean_fitness()
         
@@ -124,11 +127,11 @@ def algorithm():
         for i in range(len_max):
             count = 0
             for j in range(len(generation.RNpopulation)):
-                if i + 1 == len(generation.RNpopulation[j].genome):
+                if i + 1 == len(generation[j].genome):
                     count += 1
             lst_len_score[i].append(count)
         for i in range(len(generation.RNpopulation)):
-            lst_lenghts.append(len(generation.RNpopulation[i].genome))
+            lst_lenghts.append(len(generation[i].genome))
         
         #various printing 
         print()
@@ -176,7 +179,7 @@ def algorithm():
                  label = labels)
     plt.ylabel("hidden layer fractions")
     plt.xlabel("generations")
-    plt.ylim(ymax = 1.0) 
+    #plt.ylim(ymax = 1.0) 
     plt.legend(loc ="best",bbox_to_anchor=(1,1),
                fontsize = "xx-small",ncol = 1)
      

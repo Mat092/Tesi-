@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from random import randint, uniform 
 
-def all_sons(generation,X_train, X_test, y_train, y_test):
+
+def all_sons(generation,X_train, X_test, y_train, y_test, reverse_state):
     
-    #   Algoritmo 2, genero ogni figlio possibile 
+    #   Algoritmo 2,mantengo il 20% d'elite, genero ogni figlio possibile 
     #   e tengo gli N migliori per la next gen 
     pop_len = len(generation.RNpopulation)
     Next_gen = MLP.RNet_population(0)
-    for i in range(int(pop_len / 10)):
+    for i in range(int(pop_len / 5)):
         Next_gen.RNpopulation.append(generation.RNpopulation[i])
     
     sons = MLP.RNet_population(0)
@@ -27,9 +28,10 @@ def all_sons(generation,X_train, X_test, y_train, y_test):
     sons.pop_fitness(X_train, X_test, y_train, y_test)        
     #sons.shortBubbleSort()
     sons.RNpopulation = sorted(sons.RNpopulation, 
-                                 key = lambda x: x.fitness, reverse = True )
+                                 key = lambda x: x.fitness, 
+                                 reverse = reverse_state )
     
-    for i in range(pop_len - 5):
+    while len(Next_gen.RNpopulation) < pop_len:
         Next_gen.RNpopulation.append(sons[i])
         
     return Next_gen

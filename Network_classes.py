@@ -16,10 +16,6 @@ class RNet_population:
             
     def __getitem__(self,index):
         return self.RNpopulation[index]         
-
-    def pop_Neurons_product(self):
-        for ind in range (len(self.RNpopulation)):
-            self.RNpopulation[ind].cal_Neurons_product()
     
     def pop_fitness(self, X_train, X_test, y_train, y_test): #calcola il fitness
         for RandNet in self.RNpopulation:
@@ -31,23 +27,6 @@ class RNet_population:
             fitness_tot = fitness_tot + self.RNpopulation[i].fitness
         self.fitness_sum = fitness_tot
         self.mean_fitness = round(fitness_tot / len(self.RNpopulation),3)
-        
-    def BubbleSort(self): #se voglio ordinarli anche per numero di neuroni
-        self.pop_Neurons_product()
-        sort = Random_Network()
-        for ind1 in range(len(self.RNpopulation)):
-            for ind2 in range(ind1,len(self.RNpopulation),1):
-                if self.RNpopulation[ind1].fitness < self.RNpopulation[ind2].fitness:
-                    sort = self.RNpopulation[ind1]
-                    self.RNpopulation[ind1] = self.RNpopulation[ind2]
-                    self.RNpopulation[ind2] = sort
-                elif (self.RNpopulation[ind1].fitness == 
-                      self.RNpopulation[ind2].fitness and 
-                      self.RNpopulation[ind1].Neurons_product > 
-                      self.RNpopulation[ind2].Neurons_product):
-                    sort = self.RNpopulation[ind1]
-                    self.RNpopulation[ind1] = self.RNpopulation[ind2]
-                    self.RNpopulation[ind2] = sort
                     
     def shortBubbleSort(self): #ordina la popolazione per fitness, trovato online
         exchanges = True
@@ -78,12 +57,12 @@ class Random_Network:
     
     def __init__(self):
         self.links = 0
-        self.max_neurons = 50
+        self.max_neurons = 30
         self.fitness = 0
         self.prob = 0
         self.genome = []
         self.Neurons_product = 0
-        self.num_hidden_layers = randint(1,10)
+        self.num_hidden_layers = randint(1,5)
         for n in range(self.num_hidden_layers):
             self.genome.append(randint(1,self.max_neurons))
             
@@ -99,12 +78,12 @@ class Random_Network:
         net.fit(X_train, y_train)
         
         #log_loss score
-        #y_p = net.predict_proba(X_test)
-        #score = log_loss(y_test,y_p)
+        y_p = net.predict_proba(X_test)
+        score = log_loss(y_test,y_p)
         
         #accuracy score
-        y_p = net.predict(X_test)
-        score = accuracy_score(y_test,y_p)
+        #y_p = net.predict(X_test)
+        #score = accuracy_score(y_test,y_p)
         
         #score
         #score = net.score(X_test,y_test)
