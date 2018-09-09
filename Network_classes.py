@@ -7,8 +7,6 @@ from sklearn.metrics import log_loss, accuracy_score
 class RNet_population:
     
     def __init__(self,num_individuals = 10):
-        self.fitness_sum = 0 
-        self.mean_fitness = 0
         self.num_individuals = num_individuals
         self.RNpopulation = []
         for n in range(self.num_individuals):
@@ -41,28 +39,27 @@ class RNet_population:
                    self.RNpopulation[i+1] = temp    
            passnum = passnum - 1
         
-    def Print_Best(self): #After Bubble_sort
+    def Print_Best(self): #After sort
         print("mean fitness: ",self.mean_fitness)
         self.RNpopulation[0].Print_RNet()
         
-    def Best_Score(self):       #after Bubble sort
+    def Best_Score(self):       #after sort
         return self.RNpopulation[0].fitness
     
     def Print_pop(self):
         for ind in self.RNpopulation:
             ind.Print_RNet()
             print()
-            
+          
 class Random_Network:
     
     def __init__(self):
         self.links = 0
-        self.max_neurons = 30
+        self.max_neurons = 20
         self.fitness = 0
-        self.prob = 0
+        self.num_hidden_layers = randint(1,5)
         self.genome = []
         self.Neurons_product = 0
-        self.num_hidden_layers = randint(1,5)
         for n in range(self.num_hidden_layers):
             self.genome.append(randint(1,self.max_neurons))
             

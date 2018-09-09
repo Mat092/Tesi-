@@ -122,7 +122,19 @@ in generale, l'algoritmo fa ciò che deve, ma in questo stato non sembra restitu
 "evolvere" verso una soluzione migliore.
 
 
+Abbiamo cambiato il modo di calcolare il fitness degli individui, ora calcoliamo la log-loss e la minimizziamo: i risultati sono molto migliori
+di prima, anche con i dataset di "stress" più complicati da classificare.
 
+inoltre siamo tornati ad un algoritmo di selezione meno dispendioso, mantenendo da una generazioen all'altra un' elite del 20% di reti 
+generiamo i restanti (NMAX - NMAX/5) scorrendo dall'inizio la popolazione e scegliendo partner casuali per il crossover.
+
+siamoa anche tornati a NON usare l'early stopping delle reti e quindi un set di "validazione"
+
+Le Run mostrano un chiaro andamento evolutivo nella classificazione dei punti, che si mostra sempre più precisa con il passare del tempo.
+
+ci sono stati miglioramenti al codice, che non addestra più gli individui più di una volta. Ho creato il file "functions" che contiene
+le funzioni di selezione e la funziona che genera i grafici della classificazione, per non avere più troppe linee di codice all'interno della 
+funzione principale "algorithm", farò la stessa cosa anche con i printing.  
 
 
 
