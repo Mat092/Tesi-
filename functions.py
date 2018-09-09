@@ -7,11 +7,12 @@ from sklearn.datasets import make_moons, make_circles , load_digits
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-def selection1(generation,X_train, X_test, y_train, y_test):
+def selection_rnd(generation,X_train, X_test, y_train, y_test):
     #Algoritmo 1, mi tengo 20% di elite, poi genero figli fino a riempire la pop.
     
     pop_len = len(generation.RNpopulation)
     Next_gen = MLP.RNet_population(0)
+    
     for i in range(int(pop_len / 5)):       
         Next_gen.RNpopulation.append(generation.RNpopulation[i])
     
@@ -35,6 +36,7 @@ def all_sons(generation,X_train, X_test, y_train, y_test, reverse_state):
     #   e tengo gli N migliori per la next gen 
     pop_len = len(generation.RNpopulation)
     Next_gen = MLP.RNet_population(0)
+    
     for i in range(int(pop_len / 5)):
         Next_gen.RNpopulation.append(generation.RNpopulation[i])
     
@@ -69,10 +71,10 @@ def printing(generation,gen):
     generation.Print_Best()
     print("********************************")
     
-def select_dataset(name):
+def select_dataset(name, noise = 0, n_sample = 100):
     
     if name == "make_moons":
-        dataset = make_moons(n_samples = 100, noise = 0.2,random_state=1)
+        dataset = make_moons(n_samples = n_sample, noise = noise,random_state=1)
         X, y = dataset 
         X = StandardScaler().fit_transform(X)
         X_train, X_test, y_train, y_test = \
@@ -80,7 +82,10 @@ def select_dataset(name):
         return X, y , X_train, X_test, y_train, y_test, dataset
     
     elif name == "make_circles":
-        dataset = make_circles(n_samples = 100,noise=0.1,factor = 0.6,random_state = 1)
+        dataset = make_circles(n_samples = n_sample,
+                               noise=noise,
+                               factor = 0.6,
+                               random_state = 1)
         X, y = dataset 
         X = StandardScaler().fit_transform(X)
         X_train, X_test, y_train, y_test = \
@@ -88,8 +93,10 @@ def select_dataset(name):
         return X, y , X_train, X_test, y_train, y_test, dataset
 
     elif name == "make_circles+":
-        dataset1 = make_circles(n_samples = 100,noise=0.1,factor = 0.6,random_state = 1)
-        dataset2 = make_circles(n_samples = 50,noise=0.1,factor = 0.3,random_state = 1)
+        dataset1 = make_circles(n_samples = n_sample,noise=noise,
+                                factor = 0.6, random_state = 1)
+        dataset2 = make_circles(n_samples = int(n_sample/2), noise=noise,
+                                factor = 0.3, random_state = 1)
         for i in range(len(dataset2[1])):
             dataset2[1][i] = 0
         X1,y1 = dataset1

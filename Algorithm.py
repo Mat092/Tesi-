@@ -1,7 +1,6 @@
 import Network_classes as MLP
-import numpy as np
-from random import randint,uniform
-from selections import *
+import functions as fnc
+from sklearn.model_selection import train_test_split
  
 def algorithm():
     
@@ -17,19 +16,19 @@ def algorithm():
     lst_gen = []
     
     #Creating first generation
-    generation = MLP.RNet_population(20)
+    generation = MLP.RNet_population(5)
     gen = 1
 
-    # name = make_moons, make_circles, make_circles+ and handwritten_digits(no classifier)
-    data = select_dataset(name = "make_circles+")
+    # name = make_moons, make_circles, make_circles+ and handwritten_digits(no images)
+    data = fnc.select_dataset(name = "make_circles+", noise = 0.1, n_sample = 100)
     
     X, y , X_train, X_test, y_train, y_test, dataset = data
                   
     generation.pop_fitness( X_train, X_test, y_train, y_test)
-    #generation.shortBubbleSort()
     generation.RNpopulation = sorted(generation.RNpopulation, 
                                      key = lambda x: x.fitness, 
                                      reverse = reverse_state)
+#    generation.shortBubbleSort()
     generation.update_mean_fitness()
     
     #create last_best for convergence condition 
@@ -47,8 +46,8 @@ def algorithm():
         lst_len_score[i].append(count) 
      
     #print result and show classification
-    printing(generation,gen)    
-    classifier(generation = generation,dataset = dataset,
+    fnc.printing(generation,gen)    
+    fnc.classifier(generation = generation,dataset = dataset,
                    X = X,y = y,X_train =X_train, 
                    X_test = X_test,y_train = y_train,y_test = y_test)
     
@@ -59,15 +58,15 @@ def algorithm():
         X_train, X_test, y_train, y_test = \
             train_test_split(X, y, test_size=.2, random_state=gen)   
             
-        #Create new generation
-        
-        generation = selection1(generation,X_train, X_test, y_train, y_test)       
-        #generation = all_sons(generation,X_train, X_test, y_train, y_test,reverse_state)
+        #Create new generation.
+        generation = fnc.selection_rnd(generation,X_train, X_test, y_train, y_test)       
+#        generation = fnc.all_sons(generation,X_train, X_test, y_train, y_test,
+#                                  reverse_state)
         
         #sort new generation and updates
         generation.RNpopulation = sorted(generation.RNpopulation, 
                                      key = lambda x: x.fitness, 
-                                     reverse =reverse_state )
+                                     reverse = reverse_state )
         generation.num_individuals = len(generation.RNpopulation)
         generation.update_mean_fitness()
         
@@ -95,20 +94,19 @@ def algorithm():
             lst_len_score[i].append(count)
         
         #various print
-        printing(generation,gen)
+        fnc.printing(generation,gen)
         
         #showing classification
-        classifier(generation = generation,dataset = dataset,
+        fnc.classifier(generation = generation,dataset = dataset,
                    X = X,y = y,X_train =X_train, 
                    X_test = X_test,y_train = y_train,y_test = y_test)
-        
-    #normalize lst_len_score:
-    for i in range(len_max):
-        for j in range(gen):
-            lst_len_score[i][j] = lst_len_score[i][j] / len(generation.RNpopulation)
     
+    #normalize lst_len_score:
+    lst_len_score = [[i/len(generation.RNpopulation) for i in lst] 
+                                                for lst in lst_len_score]
+
     #Graphs    
-    final_plot(lst_mean_fitness, lst_best_fitness, lst_len_score,lst_gen,len_max)
+    fnc.final_plot(lst_mean_fitness, lst_best_fitness, lst_len_score,lst_gen,len_max)
      
 if __name__ == "__main__":
     algorithm()

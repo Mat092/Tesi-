@@ -54,8 +54,7 @@ class RNet_population:
 class Random_Network:
     
     def __init__(self):
-        self.links = 0
-        self.max_neurons = 20
+        self.max_neurons = 30
         self.fitness = 0
         self.num_hidden_layers = randint(1,5)
         self.genome = []
@@ -73,6 +72,7 @@ class Random_Network:
                             tol = 0.0001,
                             early_stopping = False , validation_fraction = 0.1)
         net.fit(X_train, y_train)
+        self.update_links(net) 
         
         #log_loss score
         y_p = net.predict_proba(X_test)
@@ -86,8 +86,7 @@ class Random_Network:
         #score = net.score(X_test,y_test)
         self.scorer = net
         self.fitness = score
-        self.update_links()            
-        
+                   
     def Crossover1(self, RandNet): #sommo i contributi tagliati in x e y 
         Crv_ratio = 1.01           #dalle due network
         son1 = Random_Network()                  
@@ -108,30 +107,36 @@ class Random_Network:
         #mutazione, può anche allungare o accorciare la rete di 1 layer
         x = randint(0,100)
         y = randint(0,100)
+        len_genome = len(self.genome)
         if x < 5:
             if x < 2.5:
                 self.genome.append(randint(1,self.max_neurons))
-            elif len(self.genome):
+            elif len_genome:
                 self.genome.pop()
+                
+        len_genome = len(self.genome) #update len_genome        
         if y < 5:
-            if len(self.genome) - 1 and len(self.genome):
-                z = randint(0,len(self.genome) - 1)
+            if len_genome - 1 and len_genome:
+                z = randint(0,len_genome - 1)
                 self.genome[z] = randint(1,self.max_neurons)
-            elif len(self.genome) :
+                
+            elif len_genome :
                 self.genome[0] = randint(1,self.max_neurons)
+                
             else :
                 self.genome.append(randint(1,self.max_neurons))
                 
-    def update_links(self):
+    def update_links(self,net):
         prd = 0
         links = 0
-        for i in range(len(self.genome)-1):
-            prd = self.genome[i]*self.genome[i+1]
+        layer = [2] + self.genome + [net.n_outputs_]
+        for i in range(len(layer)-1):
+            prd = layer[i]*layer[i+1]
             links = links + prd 
         self.links = links     
             
     def Print_RNet(self):
-        print("Hidden_Layer:",self.genome,sep = "\t")
+        print("Hidden Layer:",self.genome,sep = "\t")
         print("Fitness:",self.fitness,sep = "\t")
         
         
