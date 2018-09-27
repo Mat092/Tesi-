@@ -25,6 +25,7 @@ class RNet_population:
             fitness_tot = fitness_tot + self.RNpopulation[i].fitness
         self.fitness_sum = fitness_tot
         self.mean_fitness = round(fitness_tot / len(self.RNpopulation),3)
+        self.update_mean_links()
                     
     def shortBubbleSort(self): #ordina la popolazione per fitness, trovato online
         exchanges = True
@@ -38,6 +39,12 @@ class RNet_population:
                    self.RNpopulation[i] = self.RNpopulation[i+1]
                    self.RNpopulation[i+1] = temp    
            passnum = passnum - 1
+    
+    def update_mean_links(self):
+        tot_links = 0 
+        for ind in self.RNpopulation:
+            tot_links = tot_links + ind.links
+        self.mean_links = tot_links / self.num_individuals 
         
     def Print_Best(self): #After sort
         print("mean fitness: ",self.mean_fitness)
@@ -54,7 +61,7 @@ class RNet_population:
 class Random_Network:
     
     def __init__(self):
-        self.max_neurons = 30
+        self.max_neurons = 25
         self.fitness = 0
         self.num_hidden_layers = randint(1,5)
         self.genome = []
@@ -78,12 +85,12 @@ class Random_Network:
         y_p = net.predict_proba(X_test)
         score = log_loss(y_test,y_p)
         
-        #accuracy score
-        #y_p = net.predict(X_test)
-        #score = accuracy_score(y_test,y_p)
+#         accuracy score
+#        y_p = net.predict(X_test)
+#        score = accuracy_score(y_test,y_p)
         
         #score
-        #score = net.score(X_test,y_test)
+#        score = net.score(X_test,y_test)
         self.scorer = net
         self.fitness = score
                    
@@ -118,10 +125,12 @@ class Random_Network:
         if y < 5:
             if len_genome - 1 and len_genome:
                 z = randint(0,len_genome - 1)
-                self.genome[z] = randint(1,self.max_neurons)
+                self.genome[z] = randint(max(self.max_neurons - 2,0),
+                                         self.max_neurons + 2)
                 
             elif len_genome :
-                self.genome[0] = randint(1,self.max_neurons)
+                self.genome[0] = randint(max(self.max_neurons - 2,0),
+                                         self.max_neurons + 2)
                 
             else :
                 self.genome.append(randint(1,self.max_neurons))

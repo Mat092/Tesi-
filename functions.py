@@ -1,7 +1,7 @@
 import Network_classes as MLP
 import matplotlib.pyplot as plt
 import numpy as np
-from random import randint, uniform 
+from random import randint
 from matplotlib.colors import ListedColormap
 from sklearn.datasets import make_moons, make_circles , load_digits
 from sklearn.preprocessing import StandardScaler
@@ -65,7 +65,7 @@ def all_sons(generation,X_train, X_test, y_train, y_test, reverse_state):
 def printing(generation,gen):
     print()
     print ("Generazione",'\t', gen,sep = None)
-    print("num_Individuals = ", len(generation.RNpopulation),'\n')
+    print("num_Individuals = ", len(generation.RNpopulation))
     #generation.Print_pop()
     print("************Best Net************")
     generation.Print_Best()
@@ -73,7 +73,7 @@ def printing(generation,gen):
     
 def select_dataset(name, noise = 0, n_sample = 100):
     
-    if name == "make_moons":
+    if name == "moons":
         dataset = make_moons(n_samples = n_sample, noise = noise,random_state=1)
         X, y = dataset 
         X = StandardScaler().fit_transform(X)
@@ -81,7 +81,7 @@ def select_dataset(name, noise = 0, n_sample = 100):
             train_test_split(X, y, test_size=.2, random_state=0)
         return X, y , X_train, X_test, y_train, y_test, dataset
     
-    elif name == "make_circles":
+    elif name == "circles":
         dataset = make_circles(n_samples = n_sample,
                                noise=noise,
                                factor = 0.6,
@@ -92,7 +92,7 @@ def select_dataset(name, noise = 0, n_sample = 100):
             train_test_split(X, y, test_size=.2, random_state=0)
         return X, y , X_train, X_test, y_train, y_test, dataset
 
-    elif name == "make_circles+":
+    elif name == "circles+":
         dataset1 = make_circles(n_samples = n_sample,noise=noise,
                                 factor = 0.6, random_state = 1)
         dataset2 = make_circles(n_samples = int(n_sample/2), noise=noise,
@@ -122,48 +122,61 @@ def select_dataset(name, noise = 0, n_sample = 100):
         print("Error: no dataset called : ", name )
         exit()
 
-def final_plot(lst_mean_fitness, lst_best_fitness, lst_len_score,lst_gen,len_max):
+def final_plot(lst_mean_fitness, lst_best_fitness, lst_mean_links, 
+               lst_len_score,lst_gen,len_max):
     
     plt.figure(figsize = (8,5))
     
-    plt.subplot(211)
+    plt.subplot(111)
     plt.plot(lst_gen,lst_mean_fitness,marker = 'o')
     plt.ylabel("mean fitness")
     
-    plt.subplot(212)
+    plt.figure(figsize = (8,5))
+    
+    plt.subplot(111)
     plt.plot(lst_gen,lst_best_fitness,marker = 'o') 
     plt.ylabel("best fitness")
     plt.xlabel("generations")
     
-    plt.figure(figsize =(8,10))
+    plt.figure(figsize = (8,5))
     
-    plt.subplot(211)
-    
-    colors = ["blue","red","green","brown","pink","yellow","purple",
-              "grey","black","orange","steelblue","navy","silver","darksalmon",
-              "olive","plum","fuchsia","deeppink","springgreen","azure","tomato"]
-    
-    for i in range(0,len_max):
-        labels = "lenght = " + str(i + 1)
-        plt.plot(lst_gen,lst_len_score[i],
-                 color = colors[i],
-                 label = labels)
-    plt.ylabel("hidden layer fractions")
+    plt.subplot(111)
+    plt.plot(lst_gen,lst_mean_links,marker = 'o')
+    plt.ylabel("mean links")
     plt.xlabel("generations")
-    #plt.ylim(ymax = 1.0) 
-    plt.legend(loc ="best",bbox_to_anchor=(1,1),
-               fontsize = "x-small",ncol = 1)
+    
+    #plt.figure(figsize =(7,5))
+    
+    
+    
+#    
+#    plt.subplot(211)
+#    
+#    colors = ["blue","red","green","brown","pink","yellow","purple",
+#              "grey","black","orange","steelblue","navy","silver","darksalmon",
+#              "olive","plum","fuchsia","deeppink","springgreen","azure","tomato"]
+#    
+#    for i in range(0,len_max):
+#        labels = "lenght = " + str(i + 1)
+#        plt.plot(lst_gen,lst_len_score[i],
+#                 color = colors[i],
+#                 label = labels)
+#    plt.ylabel("hidden layer fractions")
+#    plt.xlabel("generations")
+#    #plt.ylim(ymax = 1.0) 
+#    plt.legend(loc ="best",bbox_to_anchor=(1,1),
+#               fontsize = "x-small",ncol = 1)
     
     plt.tight_layout()
     plt.show()  
       
-def classifier(generation,dataset,X,y,X_train,y_train,X_test,y_test):
+def classifier(generation,dataset,X,y,X_train,y_train,X_test,y_test,gen):
     figure = plt.figure(figsize = (8,5))   
 
     classifiers = [generation.RNpopulation[0]]
     
     datasets = [dataset]  
-    names = ["Neural Net"]
+    names = ["generazione " +  str(gen)]
     h = .02
     i = 1
     
@@ -179,21 +192,22 @@ def classifier(generation,dataset,X,y,X_train,y_train,X_test,y_test):
         cm_bright = ListedColormap(['#FF0000', '#0000FF'])
                                     
         ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-        if ds_cnt == 0:
-            ax.set_title("Input data")
-        
-        # Plot the training points
-        ax.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=cm_bright,
-                   edgecolors='k')
-       
-        # and testing points
-        ax.scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6,
-                   edgecolors='k')
-        ax.set_xlim(xx.min(), xx.max())
-        ax.set_ylim(yy.min(), yy.max())
-        ax.set_xticks(())
-        ax.set_yticks(())
-        i += 1
+        #decomment to generate input data
+#        if ds_cnt == 0:
+#            ax.set_title("Input data")
+#        
+#        # Plot the training points
+#        ax.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=cm_bright,
+#                   edgecolors='k')
+#       
+#        # and testing points
+#        ax.scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6,
+#                   edgecolors='k')
+#        ax.set_xlim(xx.min(), xx.max())
+#        ax.set_ylim(yy.min(), yy.max())
+#        ax.set_xticks(())
+#        ax.set_yticks(())
+#        i += 1
     
         # iterate over classifiers
         for name, clf in zip(names, classifiers):
@@ -225,14 +239,20 @@ def classifier(generation,dataset,X,y,X_train,y_train,X_test,y_test):
             ax.set_yticks(())
             if ds_cnt == 0:
                 ax.set_title(name)
-            #scrive lo "score"
-            ax.text(xx.max() - .3, yy.min() + .3, ('%.2f' % score).lstrip('0'),
-                    size=15, horizontalalignment='right')
+            
+#            ax.text(xx.max() - .3, yy.min() + .3, ('%.2f' % score).lstrip('0'),
+#                    size=15, horizontalalignment='right')
             i += 1
         
     plt.tight_layout()
     plt.show()
     
-
+def update_small_layer(lst,generation):
+    if len(generation[0].genome):
+        small_layer = min(generation.RNpopulation[0].genome)
+        lst.append(small_layer)
+    else :
+        lst.appen(0)
+    
     
     
