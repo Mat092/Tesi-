@@ -7,9 +7,9 @@ starting_noise = 0.0
 
 dataset = "circles+"
 
-linksFile = "/home/mattia/dati/" + dataset +"/links_data.npy"
-minFile = "/home/mattia/dati/" + dataset + "/min_data.npy"
-lenFile = "/home/mattia/dati/" + dataset + "/len_data.npy"
+linksFile = "dati/" + dataset +"/links_data.npy"
+minFile = "dati/" + dataset + "/min_data.npy"
+lenFile = "dati/" + dataset + "/len_data.npy"
 
 best_links = np.zeros(repetions)
 min_layers = np.zeros(repetions)
