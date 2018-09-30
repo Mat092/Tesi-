@@ -23,45 +23,50 @@ dev_links = np.std(links_data,axis = 0)
 dev_min = np.std(min_data,axis = 0)
 dev_len = np.std(len_data,axis = 0)
 
-plt.figure(figsize=(5,5))
 
+plt.figure(figsize=(5,5))
 plt.plot(noises, mean_links,color = "black",label = "Links/Noise graph")
 plt.fill_between(noises,mean_links-dev_links,mean_links+dev_links,
                  alpha = 0.5,color = "grey")
-plt.xlabel("noise")
-plt.ylabel("Links")
+plt.xlabel("Noise",fontsize = "x-large")
+plt.ylabel("Links",fontsize = "x-large")
 plt.grid(1,"both","both")
-plt.legend()
+plt.legend(fontsize = "x-large")
 sns.despine(plt.gcf(), trim=True, offset = 10)
 plt.ylim(0)
 #plt.xlim()
+plt.tight_layout()
+plt.savefig("/home/mattia/Scrivania/Tesi/Tesi_latex/images/links_noise_" + 
+            dataset +".png")
 
 
 plt.figure(figsize=(5,5))
-
-plt.plot(noises,mean_min,color = "black",label = "Smaller Layer/Noise graph1")
+plt.plot(noises,mean_min,color = "black",label = "Smaller Layer/Noise graph")
 plt.fill_between(noises,mean_min-dev_min,mean_min+dev_min,
                  alpha = 0.5,color = "grey")
-plt.xlabel("noise")
-plt.ylabel("Smaller Layer")
+plt.xlabel("Noise",fontsize = "x-large")
+plt.ylabel("Smaller Layer",fontsize = "x-large")
 plt.grid(1,"both","both")
-plt.legend()
+plt.legend(fontsize = "x-large",loc = 1)
 plt.ylim(0)
 sns.despine(plt.gcf(), trim=True, offset = 10)
+plt.tight_layout()
+plt.savefig("/home/mattia/Scrivania/Tesi/Tesi_latex/images/small_noise_" + 
+            dataset+".png")
+
 
 plt.figure(figsize=(5,5))
-
 plt.plot(noises,mean_len,color = "black",label = "Depth/Noise graph")
 plt.fill_between(noises,mean_len-dev_len, mean_len+dev_len, 
                  alpha = 0.5,color = "grey")
-plt.xlabel("noise")
-plt.ylabel("Depth")
+plt.xlabel("Noise",fontsize = "x-large")
+plt.ylabel("Depth",fontsize = "x-large")
 plt.grid(1,"both","both")
-plt.legend()
+plt.legend(fontsize = "x-large")
 sns.despine(plt.gcf(), trim=True, offset = 10)
 plt.ylim(0)
-#figname = "/home/mattia/Scrivania/drift/gen" + str(j) + ".png"
-#
-#plt.savefig(fname = figname)
+plt.tight_layout()
+plt.savefig("/home/mattia/Scrivania/Tesi/Tesi_latex/images/depth_noise_" + 
+            dataset+".png")
 
 plt.show()

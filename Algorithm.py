@@ -101,23 +101,23 @@ def algorithm(noise,datasetName = "moons"):
             lst_len_score[i].append(count)
         
         #various print
-#        fnc.printing(generation,gen)
+        fnc.printing(generation,gen)
         
         #showing classification
-#        fnc.classifier(generation = generation,dataset = dataset,
-#                   X = X,y = y,X_train =X_train, 
-#                   X_test = X_test,y_train = y_train,y_test = y_test,
-#                   gen = gen)
+        fnc.classifier(generation = generation,dataset = dataset,
+                   X = X,y = y,X_train =X_train, 
+                   X_test = X_test,y_train = y_train,y_test = y_test,
+                   gen = gen)
     
     #normalize lst_len_score:
     lst_len_score = [[i/len(generation.RNpopulation) for i in lst] 
                                                 for lst in lst_len_score]
 
 #    #Graphs
-    fnc.classifier(generation = generation,dataset = dataset,
-                   X = X,y = y,X_train =X_train, 
-                   X_test = X_test,y_train = y_train,y_test = y_test,
-                   gen = gen)    
+#    fnc.classifier(generation = generation,dataset = dataset,
+#                   X = X,y = y,X_train =X_train, 
+#                   X_test = X_test,y_train = y_train,y_test = y_test,
+#                   gen = gen)    
     
     fnc.final_plot(lst_mean_fitness, lst_best_fitness, lst_mean_links, 
                    lst_len_score,lst_gen,len_max)
@@ -132,7 +132,7 @@ def algorithm(noise,datasetName = "moons"):
     return generation.RNpopulation[0].links, smallest_layer, len_
      
 if __name__ == "__main__":
-    algorithm(noise = 0.1,datasetName = "moons")
+    algorithm(noise = 0.4,datasetName = "circles+")
     
 
 

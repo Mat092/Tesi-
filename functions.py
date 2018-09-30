@@ -177,7 +177,8 @@ def classifier(generation,dataset,X,y,X_train,y_train,X_test,y_test,gen):
     classifiers = [generation.RNpopulation[0]]
     
     datasets = [dataset]  
-    names = ["generazione " +  str(gen)]
+    name = "generazione " + str(gen)
+    names = [""]
     h = .02
     i = 1
     
